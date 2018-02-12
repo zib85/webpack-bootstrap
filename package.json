@@ -1,8 +1,8 @@
 {
-  "name": "webpack-test",
+  "name": "webpack-bootstrap",
   "version": "1.0.0",
-  "description": "Webpack builder test app",
-  "main": "src/js/index.js",
+  "description": "Bootstrap 4 template based on Webpack",
+  "main": "src/js/app.js",
   "scripts": {
     "build": "webpack",
     "watch": "webpack --watch",

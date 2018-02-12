@@ -19,7 +19,7 @@ module.exports = {
     // JavaScript entry point files
     entry: {
         app: [
-            './js/index.js',
+            './js/app.js',
             './scss/theme.scss',
         ],
     },
