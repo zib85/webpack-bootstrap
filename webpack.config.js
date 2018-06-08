@@ -10,7 +10,10 @@ const ImageminPlugin = require('imagemin-webpack-plugin').default;
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 // some variables
-var isProduction = (process.env.NODE_ENV === 'production')
+let isProduction = (process.env.NODE_ENV === 'production')
+
+// show errors trace
+// process.traceDeprecation = true
 
 module.exports = {
     // Base path for output management
