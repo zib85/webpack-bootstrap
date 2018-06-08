@@ -1,6 +1,7 @@
 {
   "name": "webpack-bootstrap",
   "version": "1.0.0",
+  "repository": "https://github.com/Manchenkoff/webpack-uikit.git",
   "description": "Bootstrap 4 template based on Webpack",
   "main": "src/js/app.js",
   "scripts": {

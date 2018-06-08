@@ -35,7 +35,7 @@ module.exports = {
     },
 
     // Enable source maps (only production)
-    devtool: (isProduction) ? '' : 'inline-source-map',
+    devtool: (isProduction) ? '' : 'source-map',
 
     // Webpack Dev server config
     devServer: {
