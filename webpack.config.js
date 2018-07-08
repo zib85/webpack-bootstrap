@@ -1,135 +1,42 @@
-// basic consts
-const path = require('path');
-const webpack = require('webpack');
-
-// additional plugins
-const CleanWebpackPlugin = require('clean-webpack-plugin');
-const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
-const CopyWebpackPlugin = require('copy-webpack-plugin');
-const ImageminPlugin = require('imagemin-webpack-plugin').default;
-const ExtractTextPlugin = require('extract-text-webpack-plugin');
-
-// some variables
-let isProduction = (process.env.NODE_ENV === 'production')
-
-// show errors trace
-// process.traceDeprecation = true
+const path                      = require('path');
+const webpack                   = require('webpack');
+const MiniCssExtractPlugin      = require("mini-css-extract-plugin");
+const OptimizeCSSAssetsPlugin   = require("optimize-css-assets-webpack-plugin");
+const CopyWebpackPlugin         = require('copy-webpack-plugin');
+const ImageminPlugin            = require('imagemin-webpack-plugin').default;
 
 module.exports = {
-    // Base path for output management
+    // base source path
     context: path.resolve(__dirname, 'src'),
 
-    // JavaScript entry point files
+    // entry file names to compile
     entry: {
         app: [
             './js/app.js',
-            './scss/theme.scss',
-        ],
+            './scss/theme.scss'
+        ]
     },
 
-    // Webpack output files configuration
+    // compiled files path
     output: {
-        filename: 'js/[name].js',
+        filename: "js/[name].js",
         path: path.resolve(__dirname, 'dist'),
-        publicPath: '../' // styles 'url()' function fix
+        publicPath: "../"
     },
 
-    // Enable source maps (only production)
-    devtool: (isProduction) ? '' : 'source-map',
+    // enable source maps
+    devtool: 'inline-source-map',
 
-    // Webpack Dev server config
+    // directory for starting webpack dev server
     devServer: {
-        contentBase: './app'
+        contentBase: './'
     },
 
-    // Loaders and modules
-    module: {
-        rules: [
-            // SCSS loader
-            {
-                test: /\.scss$/,
-                use: ExtractTextPlugin.extract({
-                    use: [
-                        {
-                            loader: 'css-loader',
-                            options: { sourceMap: true }
-                        },
-                        {
-                            loader: 'postcss-loader',
-                            options: { sourceMap: true }
-                        },
-                        {
-                            loader: 'sass-loader',
-                            options: { sourceMap: true }
-                        },
-                    ],
-                    fallback: 'style-loader',
-                })
-            },
-
-            // Image loader (for styles)
-            {
-                test: /\.(png|jpe?g|gif)$/,
-                loaders: [
-                    {
-                        loader: 'file-loader',
-                        options: {
-                            name: '[path][name].[ext]',
-                        },
-                    },
-                    'img-loader',
-                ]
-            },
-
-            // SVG converter into 'data:image'
-            {
-                test: /\.svg$/,
-                loader: 'svg-url-loader',
-            },
-
-            // Fonts loader
-            {
-                test: /\.(woff|woff2|eot|ttf|otf)$/,
-                use: [
-                    {
-                        loader: 'file-loader',
-                        options: {
-                            name: '[path][name].[ext]',
-                        },
-                    }
-                ],
-            },
-        ],
-    },
-
-    // Additional Webpack plugins list
+    // connect other plugins
     plugins: [
-        // Webpack modules splitter (if any vendor was used)
-        // new webpack.optimize.CommonsChunkPlugin({
-        //     name: 'common',
-        // }),
-
-        // Dist folder cleaner
-        new CleanWebpackPlugin(['dist']),
-        
-        // Copy images folder
-        new CopyWebpackPlugin(
-            [
-                // from 'src' to 'dist'
-                { from: './img', to: 'img' },
-            ],
-            {
-                // exclude SVG graphics (inline)
-                ignore: [
-                    { glob: 'svg/*' },
-                ]
-            }
-        ),
-
-        // Extract SCSS to CSS plugin
-        new ExtractTextPlugin(
-            './css/[name].css'
-        ),
+        new MiniCssExtractPlugin({filename: "./css/[name].css"}),
+        new CopyWebpackPlugin([{from: './img/static/', to: './img/static/'}]),
+        new ImageminPlugin({ test: /\.(jpe?g|png|gif)$/i }),
 
         // jQuery global plugin
         new webpack.ProvidePlugin({   
@@ -140,28 +47,65 @@ module.exports = {
             Popper: ['popper.js', 'default'],
         })
     ],
+
+    // optimizing configuration
+    optimization: {
+        minimizer: [
+            new OptimizeCSSAssetsPlugin({}),
+        ]
+    },
+
+    // setting up file extensions handlers
+    module: {
+        rules: [
+            // Styles loader
+            {
+                test: /\.(sa|sc|c)ss$/,
+                use: [
+                    MiniCssExtractPlugin.loader,
+                    'css-loader',
+                    'sass-loader',
+                ],
+            },
+            // Image loader (for styles)
+            {
+                test: /\.(png|jpe?g|gif)$/,
+                loaders: [
+                    {
+                        loader: 'file-loader',
+                        options: {name: '[path][name].[ext]'},
+                    },
+                    {
+                        loader: 'img-loader',
+                        options: {
+                            plugins: [
+                                require('imagemin-gifsicle')({
+                                    interlaced: false
+                                }),
+                                require('imagemin-mozjpeg')({
+                                    progressive: true,
+                                    arithmetic: false
+                                }),
+                                require('imagemin-pngquant')({
+                                    floyd: 0.5,
+                                    speed: 2
+                                }),
+                                require('imagemin-svgo')({
+                                    plugins: [
+                                        {removeTitle: true},
+                                        {convertPathData: false}
+                                    ]
+                                })
+                            ]
+                        }
+                    }
+                ]
+            },
+            // SVG converter into 'data:image'
+            {
+                test: /\.svg$/,
+                loader: 'svg-url-loader',
+            },
+        ]
+    }
 };
-
-// PRODUCTION ONLY
-if (isProduction) {
-    module.exports.plugins.push(
-        // JS tree-shake optimizer
-        new UglifyJSPlugin({
-            sourceMap: true
-        }),
-    );
-
-    module.exports.plugins.push(
-        // Image optimizer
-        new ImageminPlugin({
-            test: /\.(jpe?g|png|gif|svg)$/i
-        }),
-    );
-
-    module.exports.plugins.push(
-        // Minimize CSS plugin
-        new webpack.LoaderOptionsPlugin({
-            minimize: true
-        })
-    );
-}
