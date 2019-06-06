@@ -1,4 +1,4 @@
-# Webpack 4 app template
+# Webpack Bootstrap 4 template
 
 Package: Bootstrap 4, jQuery, Popper, Google Material Icons
 
