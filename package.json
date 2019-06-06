@@ -1,45 +1,50 @@
 {
   "name": "webpack-bootstrap",
-  "version": "1.0.0",
-  "repository": "https://github.com/Manchenkoff/webpack-uikit.git",
-  "description": "Bootstrap 4 template based on Webpack",
-  "main": "src/js/app.js",
+  "version": "1.0.2",
+  "description": "Webpack Bootstrap 4 app template",
   "scripts": {
-    "build": "webpack --mode=development",
-    "production": "webpack --mode=production",
+    "build": "webpack --mode=development --progress --hide-modules",
+    "production": "webpack --mode=production --progress --hide-modules --devtool=source-maps",
     "watch": "webpack --mode=development --watch",
     "start": "webpack-dev-server --open --mode=development",
     "clear": "del-cli dist"
   },
-  "keywords": [],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/manchenkoff/webpack-bootstrap.git"
+  },
+  "keywords": [
+    "webpack",
+    "manchenkoff",
+    "frontend"
+  ],
   "author": "Artyom Manchenkov",
   "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/manchenkoff/webpack-bootstrap/issues"
+  },
+  "homepage": "https://github.com/manchenkoff/webpack-bootstrap#readme",
   "devDependencies": {
-    "clean-webpack-plugin": "^0.1.19",
-    "copy-webpack-plugin": "^4.6.0",
-    "css-loader": "^1.0.1",
-    "del-cli": "^1.1.0",
-    "file-loader": "^1.1.11",
-    "hoek": "^4.2.1",
-    "imagemin": "^5.3",
-    "imagemin-gifsicle": "^6.0.1",
-    "imagemin-mozjpeg": "^8.0.0",
-    "imagemin-pngquant": "^6.0.0",
-    "imagemin-svgo": "^6.0.0",
-    "imagemin-webpack-plugin": "^2.3.0",
-    "img-loader": "^3.0.1",
-    "mini-css-extract-plugin": "^0.4.5",
-    "node-sass": "^4.11.0",
-    "optimize-css-assets-webpack-plugin": "^4.0.3",
+    "clean-webpack-plugin": "^3.0.0",
+    "copy-webpack-plugin": "^5.0.3",
+    "css-loader": "^2.1.1",
+    "del-cli": "^2.0.0",
+    "image-webpack-loader": "^5.0.0",
+    "imagemin-webpack-plugin": "^2.4.2",
+    "mini-css-extract-plugin": "^0.7.0",
+    "node-sass": "^4.12.0",
+    "optimize-css-assets-webpack-plugin": "^5.0.1",
     "sass-loader": "^7.1.0",
+    "style-loader": "^0.23.1",
     "svg-url-loader": "^2.3.2",
-    "webpack": "^4.27.1",
-    "webpack-cli": "^3.1.2",
-    "webpack-dev-server": "^3.1.10"
+    "webpack": "^4.33.0",
+    "webpack-cli": "^3.3.2",
+    "webpack-dev-server": "^3.6.0"
   },
   "dependencies": {
-    "bootstrap": "^4.1.3",
-    "jquery": "^3.3.1",
-    "popper.js": "^1.14.6"
+    "bootstrap": "^4.3.1",
+    "jquery": "^3.4.1",
+    "material-design-icons": "^3.0.1",
+    "popper.js": "^1.15.0"
   }
 }

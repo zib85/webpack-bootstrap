@@ -1,5 +1,5 @@
 # WebPack ignores
-
+.idea
 /dist
 /node_modules
 /test/js
