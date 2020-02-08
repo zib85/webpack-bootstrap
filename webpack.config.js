@@ -28,6 +28,13 @@ module.exports = (env, argv) => {
         // absolute path to the base directory
         context: path.resolve(__dirname, "src"),
 
+	// development server with hot-reload
+	devServer: {
+            publicPath: '/dist/',
+            watchContentBase: true,
+            compress: true,
+	},
+
         // entry files to compile (relative to the base dir)
         entry: [
             "./js/app.js",
